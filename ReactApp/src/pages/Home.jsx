@@ -10,6 +10,7 @@ const Home = () => {
   const [sortOrder, setSortOrder] = useState("ascending");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
+  const { shoppingCart } = useContext(StateContext);
 
   useEffect(() => {
     const filteredProducts = productsDB.filter((product) =>
@@ -89,13 +90,20 @@ const Home = () => {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-4 xl:gap-x-8 w-full lg:w-8/12 md:w-8/12 md:gap-x-10 mx-auto">
-        {products.map((product) => (
-          <ProductCard
-            product={product}
-            key={product.cardTitle}
-            isAlreadyInCart={product.isAlreadyInCart}
-          />
-        ))}
+        {products.map((product) => {
+          var cartItems = shoppingCart.items.filter(
+            (x) => x.cardTitle === product.cardTitle
+          );
+          const isAlreadyInCart = cartItems.length === 0 ? false : true;
+          console.log(isAlreadyInCart);
+          return (
+            <ProductCard
+              product={product}
+              key={product.cardTitle}
+              isAlreadyInCart={isAlreadyInCart}
+            />
+          );
+        })}
       </div>
     </>
   );
